@@ -46,12 +46,13 @@ const usuariosPut = async (req, res = response) => {
 
     const {_id, password, google, email, ...resto} = req.body;
 
+    const usuario = await Usuario.findByIdAndUpdate(id, resto);
+
     if (password){
         const salt = bcrypt.genSaltSync(10);
         usuario.password = bcrypt.hashSync(password, salt);
     }
 
-    const usuario = await Usuario.findByIdAndUpdate(id, resto);
     res.json({
         msg: 'put API - usuariosPut',
         usuario
@@ -67,16 +68,20 @@ const usuariosPatch = (req, res = response) => {
 const usuariosDelete = async (req, res = response) => {
     const {id} = req.params;
 
+    //const uid = req.uid;
+
     //eliminar de forma fisica
     //const usuario = await Usuario.findByIdAndDelete(id);
     
 
     //cambiando el estado del usuario para mantener la integridad estructural
     const usuario = await Usuario.findByIdAndUpdate( id, { estado: false } );
+    //const usuarioAutenticado = req.usuario;
 
     res.json({
         msg: 'delete API - usuariosDelete',
-        usuario
+        usuario,
+        //usuarioAutenticado
     });
 }
 
